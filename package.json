@@ -1,0 +1,28 @@
+{
+  "name": "p2p-file-transfer",
+  "main": "index.html",
+  "pear": {
+    "name": "p2p-file-transfer",
+    "type": "desktop",
+    "gui": {
+      "backgroundColor": "#1F2430",
+      "height": "540",
+      "width": "720"
+    }
+  },
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "pear run -d .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "brittle test/*.test.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "brittle": "^3.0.0",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0",
+    "pear-interface": "^1.0.0"
+  }
+}
