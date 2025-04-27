@@ -13,6 +13,8 @@ export default defineConfig([
       reportUnusedDisableDirectives: true,
     },
     rules: {
+      "no-var": "error",
+      "prefer-const": "error",
       "no-unused-vars": "warn",
       "no-console": "warn",
       eqeqeq: ["error", "always"],

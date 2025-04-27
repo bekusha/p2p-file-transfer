@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body > h1:nth-of-type(1) {
-      cursor: pointer
-    }
-
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>P2P File Transfer</title>
+        <style>
     body {
       --title-bar-height: 42px;
       padding-top: var(--title-bar-height);
+      color: #FFF;
+      background-color: #001601;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      cursor: pointer;
+      text-align: center;
+      margin-top: 20px;
     }
 
     #bar {
@@ -33,11 +41,39 @@
       margin-top: 18px;
       margin-left: 12px;
     }
-  </style>
-  <script type='module' src='./app.js'></script>
-</head>
-<body>
-  <div id="bar"><pear-ctrl></pear-ctrl></div>
-  <h1>desktop</h1>
-</body>
+
+    section {
+      margin: 20px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+        </style>
+    </head>
+    <body>
+        <div id="bar">
+            <pear-ctrl></pear-ctrl>
+        </div>
+        <h1>P2P File Transfer</h1>
+        <section>
+            <h2>Create a New Room</h2>
+            <button id="createRoom">Create Room</button>
+        </section>
+        <section>
+            <h2>Join Existing Room</h2>
+            <input type="text" id="peer-id" placeholder="Enter Room Topic">
+            <button id="joinRoom">Join Room</button>
+        </section>
+        <section>
+            <h2>Room Code</h2>
+            <p id="localId">No room yet</p>
+            <button id="copyId">Copy Room Code</button>
+        </section>
+        <section>
+            <h2>Status</h2>
+            <p id="connectStatus">Idle</p>
+        </section>
+        <script type="module" src="./app.js"></script>
+    </body>
 </html>
