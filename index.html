@@ -3,77 +3,42 @@
     <head>
         <meta charset="UTF-8">
         <title>P2P File Transfer</title>
-        <style>
-    body {
-      --title-bar-height: 42px;
-      padding-top: var(--title-bar-height);
-      color: #FFF;
-      background-color: #001601;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    h1 {
-      cursor: pointer;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    #bar {
-      background: rgba(55, 60, 72, 0.6);
-      backdrop-filter: blur(64px);
-      -webkit-app-region: drag;
-      height: var(--title-bar-height);
-      padding: 0;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      color: #FFF;
-      white-space: nowrap;
-      box-sizing: border-box;
-      position: fixed;
-      z-index: 2;
-      width: 100%;
-      left: 0;
-      top: 0;
-    }
-
-    pear-ctrl[data-platform=darwin] {
-      margin-top: 18px;
-      margin-left: 12px;
-    }
-
-    section {
-      margin: 20px;
-    }
-
-    button {
-      cursor: pointer;
-    }
-        </style>
+        <link rel="stylesheet" href="index.css">
     </head>
     <body>
         <div id="bar">
             <pear-ctrl></pear-ctrl>
         </div>
-        <h1>P2P File Transfer</h1>
-        <section>
-            <h2>Create a New Room</h2>
-            <button id="createRoom">Create Room</button>
-        </section>
-        <section>
-            <h2>Join Existing Room</h2>
-            <input type="text" id="peer-id" placeholder="Enter Room Topic">
-            <button id="joinRoom">Join Room</button>
-        </section>
-        <section>
-            <h2>Room Code</h2>
-            <p id="localId">No room yet</p>
-            <button id="copyId">Copy Room Code</button>
-        </section>
-        <section>
-            <h2>Status</h2>
-            <p id="connectStatus">Idle</p>
-        </section>
+        <div id="mainUI">
+            <h1>P2P File Transfer</h1>
+            <section>
+                <h2>Create a New Room</h2>
+                <button id="createRoom">Create Room</button>
+            </section>
+            <section>
+                <h2>Join Existing Room</h2>
+                <input type="text" id="peer-id" placeholder="Enter Room Topic">
+                <button id="joinRoom">Join Room</button>
+            </section>
+        </div>
+        <div id="loadingScreen">
+            <h2>⏳ Loading...</h2>
+        </div>
+        <div id="chatScreen">
+            <button id="leaveChatButton">❌</button>
+            <h3>Room For File Transfer</h3>
+            <div>
+                <p id="roomCode">
+                    <span id="roomCodeValue">-</span>
+                </p>
+                <button id="copyRoomCodeButton"> Copy Room Key And Share With Your Peer</button>
+            </div>
+            <h2 id="chatStatus">Wait for your peer</h2>
+            <div id="fileTransferUI">
+                <input type="file" id="fileInput">
+                <button id="sendFileButton">📤 Send File</button>
+            </div>
+        </div>
         <script type="module" src="./app.js"></script>
     </body>
 </html>

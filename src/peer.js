@@ -3,19 +3,24 @@ import Hyperswarm from "hyperswarm";
 import crypto from "hypercore-crypto";
 import b4a from "b4a";
 
+// Teardown function from Pear
 const { teardown } = Pear;
-
+// define swarm for peer-to-peer connections
 const swarm = new Hyperswarm();
 let topicBuffer = null;
 let onMessage = null;
 
 // Tear down swarm on app exit
 teardown(() => swarm.destroy());
-
-// Handle incoming connections
 swarm.on("connection", (peer) => {
   const name = b4a.toString(peer.remotePublicKey, "hex").substr(0, 6);
-  peer.on("data", (message) => onMessage(name, message));
+
+  // 🔥 Send __CONNECTED__ event
+  if (typeof onMessage === "function") {
+    onMessage(name, Buffer.from("__CONNECTED__"), peer);
+  }
+
+  peer.on("data", (message) => onMessage(name, message, peer));
   peer.on("error", (e) => alert(`❌ Connection error: ${e.message}`));
 });
 

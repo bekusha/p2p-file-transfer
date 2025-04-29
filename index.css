@@ -1,0 +1,133 @@
+body {
+  --title-bar-height: 42px;
+  padding-top: var(--title-bar-height);
+  color: #fff;
+  background-color: #001601;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+  letter-spacing: 1px;
+}
+
+#bar {
+  background: rgba(55, 60, 72, 0.6);
+  backdrop-filter: blur(64px);
+  -webkit-app-region: drag;
+  height: var(--title-bar-height);
+  padding: 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: #fff;
+  white-space: nowrap;
+  box-sizing: border-box;
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+pear-ctrl[data-platform="darwin"] {
+  margin-top: 18px;
+  margin-left: 12px;
+}
+
+section {
+  margin: 20px;
+}
+
+button {
+  background-color: #003300;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+  letter-spacing: 1px;
+}
+
+button:hover {
+  background-color: #005500;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+#loadingScreen {
+  display: none;
+  text-align: center;
+  margin-top: 100px;
+}
+
+#chatScreen {
+  position: relative;
+  display: none;
+  text-align: center;
+  margin-top: 60px;
+}
+
+section,
+#chatScreen,
+#loadingScreen {
+  background-color: rgba(0, 32, 0, 0.5);
+  border: 1px solid #00ff99;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  box-shadow: 0 0 10px #00ff99;
+}
+
+#chatStatus,
+#connectStatus {
+  font-size: 1.2rem;
+  color: #00ff99;
+  animation: pulse 2s infinite;
+}
+
+#roomCode {
+  background-color: #002200;
+  padding: 10px;
+  border-radius: 8px;
+  font-family: monospace;
+}
+
+#fileTransferUI {
+  display: none;
+  margin-top: 40px;
+}
+
+#chatStatus {
+  margin-top: 20px;
+}
+
+#fileInput {
+  margin-bottom: 10px;
+  background-color: #001601;
+  color: #00ff99;
+  border: 1px solid #00ff99;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+#leaveChatButton {
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+
+input[type="text"] {
+  background-color: #001601;
+  width: 60%;
+  color: #00ff99;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  margin-right: 10px;
+}
