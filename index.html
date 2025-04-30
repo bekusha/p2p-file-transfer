@@ -9,6 +9,7 @@
         <div id="bar">
             <pear-ctrl></pear-ctrl>
         </div>
+        <!-- Main UI -->
         <div id="mainUI">
             <h1>P2P File Transfer</h1>
             <section>
@@ -21,11 +22,13 @@
                 <button id="joinRoom">Join Room</button>
             </section>
         </div>
+        <!-- Loading -->
         <div id="loadingScreen">
             <h2>⏳ Loading...</h2>
         </div>
+        <!-- File Transfer Room -->
         <div id="chatScreen">
-            <button id="leaveChatButton">❌</button>
+            <button id="leaveChatButton">←</button>
             <h3>Room For File Transfer</h3>
             <div>
                 <p id="roomCode">
@@ -33,7 +36,7 @@
                 </p>
                 <button id="copyRoomCodeButton"> Copy Room Key And Share With Your Peer</button>
             </div>
-            <h2 id="chatStatus">Wait for your peer</h2>
+            <h2 id="chatStatus"></h2>
             <div id="fileTransferUI">
                 <input type="file" id="fileInput">
                 <button id="sendFileButton">📤 Send File</button>

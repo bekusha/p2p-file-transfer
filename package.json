@@ -8,7 +8,10 @@
       "backgroundColor": "#1F2430",
       "height": "540",
       "width": "720"
-    }
+    },
+    "links": [
+      "https://api.openai.com"
+    ]
   },
   "type": "module",
   "license": "Apache-2.0",
@@ -22,11 +25,18 @@
     "@eslint/js": "^9.25.1",
     "brittle": "^3.0.0",
     "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "globals": "^16.0.0",
-    "pear-interface": "^1.0.0"
+    "pear-interface": "^1.0.0",
+    "prettier": "^3.5.3"
   },
   "dependencies": {
+    "axios": "^1.9.0",
     "b4a": "^1.6.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "hypercore-crypto": "^3.6.0",
     "hyperswarm": "^4.11.5"
   }

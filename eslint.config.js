@@ -1,5 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
+import prettierPlugin from "eslint-plugin-prettier";
+import prettierConfig from "eslint-config-prettier/flat";
 
 export default defineConfig([
   {
@@ -12,6 +14,9 @@ export default defineConfig([
     linterOptions: {
       reportUnusedDisableDirectives: true,
     },
+    plugins: {
+      prettier: prettierPlugin,
+    },
     rules: {
       "no-var": "error",
       "prefer-const": "error",
@@ -19,11 +24,9 @@ export default defineConfig([
       "no-console": "warn",
       eqeqeq: ["error", "always"],
       curly: ["error", "all"],
-      semi: ["error", "always"],
-      indent: ["error", 2, { SwitchCase: 1 }],
-      "object-curly-spacing": ["error", "always"],
-      "comma-dangle": ["error", "only-multiline"],
+      "prettier/prettier": "error",
     },
+    ...prettierConfig,
   },
   globalIgnores(["node_modules", "build", "coverage", "out"]),
 ]);

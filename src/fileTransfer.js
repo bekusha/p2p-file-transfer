@@ -1,3 +1,11 @@
+// fileTransfer.js
+// ---------------
+// This module handles peer-to-peer file transfer between users,
+// including chunked upload/download, file reconstruction, and optional AI analysis.
+// It is integrated with the OpenAI API via `analyzeTextBlob()` to summarize text-based files.
+
+import { analyzeTextBlob } from "./ai/AI-analyze.js";
+
 const CHUNK_SIZE = 64 * 1024; // 64KB
 const incomingFiles = {};
 
@@ -91,8 +99,81 @@ export function handleIncomingChunk(parsed) {
   }
 }
 
-// Reconstructs the full file from chunks and creates a download link.
+// Reconstructs the file from its chunks and displays it in the chat interface.
 function reconstructAndDisplayFile(file) {
+  const blob = rebuildBlobFromChunks(file);
+  const container = buildFileCard(file.meta, blob);
+  document.getElementById("chatScreen")?.appendChild(container);
+}
+
+// Button for analyzing the file with AI
+function createAnalyzeButton(blob, meta, container) {
+  const button = document.createElement("button");
+  button.innerText = "🧠 Analyze with AI";
+  Object.assign(button.style, {
+    padding: "6px 12px",
+    border: "1px solid #00ffcc",
+    background: "#002222",
+    color: "#00ffcc",
+    borderRadius: "6px",
+    cursor: "pointer",
+  });
+
+  button.addEventListener("click", async () => {
+    button.disabled = true;
+    button.innerText = "🔄 Analyzing...";
+    try {
+      const summary = await analyzeTextBlob(blob, meta.name);
+      const summaryBox = document.createElement("div");
+      summaryBox.innerText = `📄 AI Summary: ${summary}`;
+      Object.assign(summaryBox.style, {
+        marginTop: "10px",
+        color: "#aaffee",
+        whiteSpace: "pre-wrap",
+      });
+      container.appendChild(summaryBox);
+    } catch {
+      alert("❌ Failed to analyze file.");
+    } finally {
+      button.disabled = false;
+      button.innerText = "🧠 Analyze with AI";
+    }
+  });
+
+  return button;
+}
+
+// Builds a card for the file, including a download link and an AI analysis button.
+function buildFileCard(meta, blob) {
+  const url = URL.createObjectURL(blob);
+  const container = document.createElement("div");
+  Object.assign(container.style, {
+    marginTop: "20px",
+    padding: "10px",
+    border: "1px solid #00ff99",
+    borderRadius: "8px",
+    backgroundColor: "#001a1a",
+  });
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = meta.name;
+  link.innerText = `⬇️ Download ${meta.name}`;
+  Object.assign(link.style, {
+    display: "block",
+    marginBottom: "8px",
+  });
+
+  container.appendChild(link);
+
+  const analyzeButton = createAnalyzeButton(blob, meta, container);
+  container.appendChild(analyzeButton);
+
+  return container;
+}
+
+// Rebuilds the file from its chunks and creates a Blob object.
+function rebuildBlobFromChunks(file) {
   const { chunks, meta } = file;
   const totalSize = chunks.reduce((sum, c) => sum + c.length, 0);
   const fullFile = new Uint8Array(totalSize);
@@ -103,20 +184,9 @@ function reconstructAndDisplayFile(file) {
     offset += chunk.length;
   }
 
-  const blob = new Blob([fullFile], {
+  return new Blob([fullFile], {
     type: meta.mime || "application/octet-stream",
   });
-
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = meta.name;
-  link.innerText = `⬇️ Download ${meta.name}`;
-  link.style.display = "block";
-  link.style.marginTop = "20px";
-
-  const chatScreen = document.getElementById("chatScreen");
-  chatScreen?.appendChild(link);
 }
 
 function sleep(ms) {
