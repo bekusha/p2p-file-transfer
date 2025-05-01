@@ -9,10 +9,21 @@ import { analyzeTextBlob } from "./ai/AI-analyze.js";
 const CHUNK_SIZE = 64 * 1024; // 64KB
 const incomingFiles = {};
 
+function getProgressUI() {
+  return {
+    progressContainer: document.getElementById("progressContainer"),
+    progressBar: document.getElementById("progressBar"),
+    progressLabel: document.getElementById("progressLabel"),
+    cancelButton: document.getElementById("cancelButton"),
+    sendButton: document.getElementById("sendFileButton"),
+    fileInput: document.getElementById("fileInput"),
+    chatScreen: document.getElementById("chatScreen"),
+  };
+}
+
 // Sets up the file sending process by attaching a listener to the "Send File" button.
 export function setupFileTransfer(peerConnection) {
-  const sendButton = document.getElementById("sendFileButton");
-  const fileInput = document.getElementById("fileInput");
+  const { sendButton, fileInput } = getProgressUI();
 
   if (!sendButton || !fileInput) {
     return;
@@ -40,11 +51,8 @@ export function sendFile(peerConnection, file) {
       Date.now() + "-" + Math.random().toString(36).substring(2, 8);
 
     // UI elements
-    const progressContainer = document.getElementById("progressContainer");
-    const progressBar = document.getElementById("progressBar");
-    const progressLabel = document.getElementById("progressLabel");
-    const cancelButton = document.getElementById("cancelButton");
-    // Progress bar
+    const { progressContainer, progressBar, progressLabel, cancelButton } =
+      getProgressUI();
     progressContainer.style.display = "block";
     cancelButton.style.display = "inline-block";
     progressBar.value = 0;
@@ -124,11 +132,8 @@ export function handleIncomingChunk(parsed) {
     };
 
     // Initialize receiver progress bar
-    const progressContainer = document.getElementById("progressContainer");
-    const progressBar = document.getElementById("progressBar");
-    const progressLabel = document.getElementById("progressLabel");
-    const cancelButton = document.getElementById("cancelButton");
-
+    const { progressContainer, progressBar, progressLabel, cancelButton } =
+      getProgressUI();
     progressContainer.style.display = "block";
     cancelButton.style.display = "none";
 
@@ -146,8 +151,7 @@ export function handleIncomingChunk(parsed) {
     file.receivedCount++;
 
     requestAnimationFrame(() => {
-      const progressBar = document.getElementById("progressBar");
-      const progressLabel = document.getElementById("progressLabel");
+      const { progressBar, progressLabel } = getProgressUI();
 
       progressBar.value = file.receivedCount;
       progressLabel.innerText = `${Math.round(
@@ -166,11 +170,9 @@ export function handleIncomingChunk(parsed) {
 function reconstructAndDisplayFile(file) {
   const blob = rebuildBlobFromChunks(file);
   const container = buildFileCard(file.meta, blob);
-  document.getElementById("chatScreen")?.appendChild(container);
-
-  const progressContainer = document.getElementById("progressContainer");
-  const progressLabel = document.getElementById("progressLabel");
-  const cancelButton = document.getElementById("cancelButton");
+  const { progressContainer, progressLabel, cancelButton, chatScreen } =
+    getProgressUI();
+  chatScreen?.appendChild(container);
 
   if (progressLabel) progressLabel.innerText = "✅ File is downloaded";
   if (cancelButton) cancelButton.style.display = "none";

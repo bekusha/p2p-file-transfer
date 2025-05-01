@@ -2,7 +2,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 const openaiKey = process.env.OPENAI_API_KEY;
-
 export async function analyzeTextBlob(blob, fileName) {
   const text = await blob.text();
   const fileContent = await blob.text();
