@@ -32,7 +32,7 @@ h1 {
   top: 0;
 }
 
-pear-ctrl[data-platform='darwin'] {
+pear-ctrl[data-platform="darwin"] {
   margin-top: 18px;
   margin-left: 12px;
 }
@@ -118,13 +118,18 @@ section,
   border-radius: 6px;
 }
 
+#progressContainer {
+  display: none;
+  margin-top: 10px;
+}
+
 #leaveChatButton {
   position: absolute;
   left: 10px;
   top: 0;
 }
 
-input[type='text'] {
+input[type="text"] {
   background-color: #001601;
   width: 60%;
   color: #00ff99;
@@ -132,4 +137,76 @@ input[type='text'] {
   padding: 8px;
   border-radius: 6px;
   margin-right: 10px;
+}
+
+.download-button {
+  padding: 6px 12px;
+  background-color: #002222;
+  color: #00ffcc;
+  border: 1px solid #00ffcc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.download-button:hover {
+  background-color: #003333;
+}
+
+/* Analyze Button */
+.analyze-button {
+  padding: 6px 12px;
+  border: 1px solid #00ffcc;
+  background: #002222;
+  color: #00ffcc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.analyze-button:hover {
+  background-color: #003333;
+}
+
+/* Progress Container */
+#progressContainer {
+  margin-top: 10px;
+}
+
+/* Progress Bar */
+#progressBar {
+  width: 100%;
+}
+
+/* Progress Label */
+#progressLabel {
+  display: inline-block;
+  margin-left: 8px;
+  color: #00ffcc;
+}
+
+/* File Card */
+.file-card {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #00ff99;
+  border-radius: 8px;
+  background-color: #001a1a;
+  color: #ccffee;
+}
+
+/* Link inside File Card */
+.file-card a {
+  display: block;
+  margin-bottom: 8px;
+  color: #00ddff;
+}
+
+.file-download-link {
+  display: block;
+  margin-bottom: 8px;
+  color: #00ddff;
+  text-decoration: none;
+}
+
+.ai-summary-box {
+  margin-top: 10px;
+  color: #aaffee;
+  white-space: pre-wrap;
 }

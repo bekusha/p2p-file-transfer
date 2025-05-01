@@ -30,12 +30,34 @@ export function setupFileTransfer(peerConnection) {
 
 // Splits the file into chunks and sends it to the peer.
 export function sendFile(peerConnection, file) {
+  let isCancelled = false;
+
   const reader = new FileReader();
   reader.onload = async () => {
     const buffer = new Uint8Array(reader.result);
     const totalChunks = Math.ceil(buffer.length / CHUNK_SIZE);
     const fileId =
       Date.now() + "-" + Math.random().toString(36).substring(2, 8);
+
+    // UI elements
+    const progressContainer = document.getElementById("progressContainer");
+    const progressBar = document.getElementById("progressBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const cancelButton = document.getElementById("cancelButton");
+    // Progress bar
+    progressContainer.style.display = "block";
+    cancelButton.style.display = "inline-block";
+    progressBar.value = 0;
+    progressBar.max = totalChunks;
+    progressLabel.innerText = "0%";
+
+    cancelButton.onclick = () => {
+      isCancelled = true;
+      progressContainer.style.display = "none";
+      cancelButton.style.display = "none";
+      alert("❌ Transfer cancelled.");
+      return;
+    };
 
     // Send file metadata first
     const fileMeta = {
@@ -51,6 +73,9 @@ export function sendFile(peerConnection, file) {
 
     // Send file chunks sequentially
     for (let i = 0; i < totalChunks; i++) {
+      if (isCancelled) {
+        return;
+      }
       const chunk = buffer.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
       const chunkMessage = {
         type: "file-chunk",
@@ -58,8 +83,23 @@ export function sendFile(peerConnection, file) {
         index: i,
         data: Array.from(chunk),
       };
+      requestAnimationFrame(() => {
+        if (isCancelled) return;
+        progressBar.value = i + 1;
+        progressLabel.innerText = `${Math.round(((i + 1) / totalChunks) * 100)}%`;
+      });
+
       peerConnection.write(Buffer.from(JSON.stringify(chunkMessage)));
       await sleep(5);
+    }
+    if (!isCancelled) {
+      requestAnimationFrame(() => {
+        if (progressLabel) progressLabel.innerText = "✅ File is sent";
+        if (cancelButton) cancelButton.style.display = "none";
+        setTimeout(() => {
+          if (progressContainer) progressContainer.style.display = "none";
+        }, 2000);
+      });
     }
 
     alert("✅ File sent successfully!");
@@ -82,6 +122,19 @@ export function handleIncomingChunk(parsed) {
       chunks: [],
       receivedCount: 0,
     };
+
+    // Initialize receiver progress bar
+    const progressContainer = document.getElementById("progressContainer");
+    const progressBar = document.getElementById("progressBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const cancelButton = document.getElementById("cancelButton");
+
+    progressContainer.style.display = "block";
+    cancelButton.style.display = "none";
+
+    progressBar.value = 0;
+    progressBar.max = parsed.totalChunks;
+    progressLabel.innerText = "0%";
   } else if (type === "file-chunk") {
     const file = incomingFiles[fileId];
     if (!file) {
@@ -91,6 +144,16 @@ export function handleIncomingChunk(parsed) {
     const chunkData = new Uint8Array(data);
     file.chunks[index] = chunkData;
     file.receivedCount++;
+
+    requestAnimationFrame(() => {
+      const progressBar = document.getElementById("progressBar");
+      const progressLabel = document.getElementById("progressLabel");
+
+      progressBar.value = file.receivedCount;
+      progressLabel.innerText = `${Math.round(
+        (file.receivedCount / file.meta.totalChunks) * 100
+      )}%`;
+    });
 
     // Once all chunks are received, reconstruct the file
     if (file.receivedCount === file.meta.totalChunks) {
@@ -104,33 +167,35 @@ function reconstructAndDisplayFile(file) {
   const blob = rebuildBlobFromChunks(file);
   const container = buildFileCard(file.meta, blob);
   document.getElementById("chatScreen")?.appendChild(container);
+
+  const progressContainer = document.getElementById("progressContainer");
+  const progressLabel = document.getElementById("progressLabel");
+  const cancelButton = document.getElementById("cancelButton");
+
+  if (progressLabel) progressLabel.innerText = "✅ File is downloaded";
+  if (cancelButton) cancelButton.style.display = "none";
+  if (progressContainer) {
+    setTimeout(() => {
+      progressContainer.style.display = "none";
+    }, 2000); // hides after 2s for smoother UX
+  }
 }
 
 // Button for analyzing the file with AI
 function createAnalyzeButton(blob, meta, container) {
   const button = document.createElement("button");
   button.innerText = "🧠 Analyze with AI";
-  Object.assign(button.style, {
-    padding: "6px 12px",
-    border: "1px solid #00ffcc",
-    background: "#002222",
-    color: "#00ffcc",
-    borderRadius: "6px",
-    cursor: "pointer",
-  });
+  button.className = "analyze-button";
 
   button.addEventListener("click", async () => {
     button.disabled = true;
     button.innerText = "🔄 Analyzing...";
     try {
+      // Shows Ai analysis in the chat
       const summary = await analyzeTextBlob(blob, meta.name);
       const summaryBox = document.createElement("div");
       summaryBox.innerText = `📄 AI Summary: ${summary}`;
-      Object.assign(summaryBox.style, {
-        marginTop: "10px",
-        color: "#aaffee",
-        whiteSpace: "pre-wrap",
-      });
+      summaryBox.className = "ai-summary-box";
       container.appendChild(summaryBox);
     } catch {
       alert("❌ Failed to analyze file.");
@@ -147,22 +212,13 @@ function createAnalyzeButton(blob, meta, container) {
 function buildFileCard(meta, blob) {
   const url = URL.createObjectURL(blob);
   const container = document.createElement("div");
-  Object.assign(container.style, {
-    marginTop: "20px",
-    padding: "10px",
-    border: "1px solid #00ff99",
-    borderRadius: "8px",
-    backgroundColor: "#001a1a",
-  });
+  container.className = "file-card";
 
   const link = document.createElement("a");
   link.href = url;
   link.download = meta.name;
   link.innerText = `⬇️ Download ${meta.name}`;
-  Object.assign(link.style, {
-    display: "block",
-    marginBottom: "8px",
-  });
+  link.className = "file-download-link";
 
   container.appendChild(link);
 

@@ -6,7 +6,7 @@
     "type": "desktop",
     "gui": {
       "backgroundColor": "#1F2430",
-      "height": "540",
+      "height": "720",
       "width": "720"
     },
     "links": [
@@ -34,9 +34,7 @@
   "dependencies": {
     "axios": "^1.9.0",
     "b4a": "^1.6.7",
-    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0",
     "hypercore-crypto": "^3.6.0",
     "hyperswarm": "^4.11.5"
   }

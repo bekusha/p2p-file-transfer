@@ -41,6 +41,16 @@
                 <input type="file" id="fileInput">
                 <button id="sendFileButton">📤 Send File</button>
             </div>
+            <div id="progressContainer">
+                <progress
+                    id="progressBar"
+                    value="0"
+                    max="100"
+                    style="width: 100%;"
+                ></progress>
+                <span id="progressLabel">0%</span>
+                <button id="cancelButton">❌ Cancel Transfer</button>
+            </div>
         </div>
         <script type="module" src="./app.js"></script>
     </body>
